@@ -1,7 +1,5 @@
 package junitparams.internal;
 
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -208,11 +206,6 @@ public class InvokeParameterisedMethod extends Statement {
             return Byte.parseByte((String) object);
         if (clazz.isAssignableFrom(BigDecimal.class))
             return new BigDecimal((String) object);
-        PropertyEditor editor = PropertyEditorManager.findEditor(clazz);
-        if (editor != null) {
-            editor.setAsText((String) object);
-            return editor.getValue();
-        }
         throw new IllegalArgumentException("Parameter type (" + clazz.getName() + ") cannot be handled!" +
                 " Only primitive types, BigDecimals and Strings can be used.");
     }

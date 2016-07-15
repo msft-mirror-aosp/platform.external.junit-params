@@ -9,3 +9,7 @@ Local Modifications:
       30244565 - Work around the Android API's lack of the class
                  javax.lang.model.type.NullType by replacing
                  with Void.
+      30244565 - Work around Android's lack of the
+                 java.beans.PropertyEditor and
+                 java.beans.PropertyEditorManager classes by
+                 removing the usages of them.
