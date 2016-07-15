@@ -6,4 +6,6 @@ Description:
 Parameterised tests that don't suck
 
 Local Modifications:
-      No Modifications
+      30244565 - Work around the Android API's lack of the class
+                 javax.lang.model.type.NullType by replacing
+                 with Void.

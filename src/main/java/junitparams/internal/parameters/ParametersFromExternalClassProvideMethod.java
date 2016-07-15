@@ -3,7 +3,6 @@ package junitparams.internal.parameters;
 import junitparams.Parameters;
 import org.junit.runners.model.FrameworkMethod;
 
-import javax.lang.model.type.NullType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ class ParametersFromExternalClassProvideMethod implements ParametrizationStrateg
     @Override
     public boolean isApplicable() {
         return annotation != null
-                && !annotation.source().isAssignableFrom(NullType.class)
+                && !annotation.source().isAssignableFrom(Void.class)
                 && annotation.method().isEmpty();
     }
 
