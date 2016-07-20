@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -101,10 +102,12 @@ public class SamplesOfUsageTest {
         return new Object[]{new Object[]{"first", 1}, new Object[]{"second", 2}};
     }
 
+    @Ignore("does not work when run on device as it does not have access to the file")
     @Test
     @FileParameters("src/test/resources/test.csv")
     public void loadParamsFromCsv(int age, String name) { }
 
+    @Ignore("does not work when run on device as it does not have access to the file")
     @Test
     @FileParameters(value = "src/test/resources/test.csv", mapper = PersonMapper.class)
     public void loadParamsFromAnyFile(PersonTest.Person person) { }
