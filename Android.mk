@@ -21,6 +21,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
 LOCAL_MODULE := junit-params-host
+LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_JAVA_LIBRARIES := \
 	junit
@@ -31,7 +32,9 @@ include $(BUILD_HOST_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
 LOCAL_MODULE := junit-params-hostdex
+LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
+LOCAL_JAVA_LIBRARIES := core-oj-hostdex core-libart-hostdex
 LOCAL_STATIC_JAVA_LIBRARIES := \
 	junit4-target-hostdex
 include $(BUILD_HOST_DALVIK_STATIC_JAVA_LIBRARY)
@@ -43,7 +46,9 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
 LOCAL_MODULE := junit-params
+LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
+LOCAL_JAVA_LIBRARIES := core-oj core-libart
 LOCAL_STATIC_JAVA_LIBRARIES := \
 	junit4-target
 include $(BUILD_STATIC_JAVA_LIBRARY)
@@ -61,7 +66,9 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call all-java-files-under, src/test/java)
 LOCAL_JAVA_RESOURCE_DIRS := src/test/resources
 LOCAL_MODULE := junit-params-test
+LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
+LOCAL_JAVA_LIBRARIES := core-oj core-libart junit-targetdex
 LOCAL_STATIC_JAVA_LIBRARIES := \
 	junit-params \
 	junit-params-assertj-core
