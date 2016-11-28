@@ -36,7 +36,7 @@ LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
 LOCAL_JAVA_LIBRARIES := core-oj-hostdex core-libart-hostdex
 LOCAL_STATIC_JAVA_LIBRARIES := \
-	junit4-target-hostdex
+	junit-hostdex
 include $(BUILD_HOST_DALVIK_STATIC_JAVA_LIBRARY)
 
 #-------------------------------
