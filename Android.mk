@@ -24,7 +24,7 @@ LOCAL_MODULE := junit-params-host
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_JAVA_LIBRARIES := \
-	junit
+	junit-host
 include $(BUILD_HOST_JAVA_LIBRARY)
 
 # build for the host dalvik
