@@ -50,7 +50,7 @@ LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
 LOCAL_JAVA_LIBRARIES := core-oj core-libart
 LOCAL_STATIC_JAVA_LIBRARIES := \
-	junit4-target
+	junit
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
 #-------------------------------
@@ -68,7 +68,7 @@ LOCAL_JAVA_RESOURCE_DIRS := src/test/resources
 LOCAL_MODULE := junit-params-test
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_MODULE_TAGS := optional
-LOCAL_JAVA_LIBRARIES := core-oj core-libart junit-targetdex
+LOCAL_JAVA_LIBRARIES := core-oj core-libart junit
 LOCAL_STATIC_JAVA_LIBRARIES := \
 	junit-params \
 	junit-params-assertj-core
