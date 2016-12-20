@@ -219,13 +219,7 @@ public class InvokeParameterisedMethod extends Statement {
     }
 
     boolean matchesDescription(Description description) {
-        // TODO(JUnit4.10) - because JUnit 4.10 has no separation of display name and unique method
-        // id, we need to do some mangling of the name to get a match
-        String displayName = description.getDisplayName();
-
-        int endIndex = displayName.lastIndexOf("(", displayName.length() - 1);
-        String uniqueName = (endIndex == - 1) ? displayName : displayName.substring(0, endIndex);
-        return uniqueName.equals(uniqueMethodId);
+        return description.hashCode() == uniqueMethodId.hashCode();
     }
 
     @Override

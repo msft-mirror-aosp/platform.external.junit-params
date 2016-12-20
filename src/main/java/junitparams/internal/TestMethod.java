@@ -103,13 +103,10 @@ public class TestMethod {
             for (int i = 0; i < params.length; i++) {
                 Object paramSet = params[i];
                 String name = namingStrategy.getTestCaseName(i, paramSet);
-                // TODO(JUnit4.10) - Description.createTestDescription(Class, String, Serializable)
-                // is not available in JUnit 4.10. That means that it is not possible to
-                // differentiate between tests using a unique method id. Just use the name for now.
-                // There is a corresponding change in
-                // InvokeParameterisedMethod.matchesDescription(Description description).
+                String uniqueMethodId = Utils.uniqueMethodId(i, paramSet, name());
+
                 parametrised.addChild(
-                        Description.createTestDescription(testClass(), name)
+                        Description.createTestDescription(testClass().getName(), name, uniqueMethodId)
                 );
             }
             return parametrised;
