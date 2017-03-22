@@ -13,3 +13,4 @@ Local Modifications:
                  java.beans.PropertyEditor and
                  java.beans.PropertyEditorManager classes by
                  removing the usages of them.
+      36074730 - Make sure that filters affect the Description.

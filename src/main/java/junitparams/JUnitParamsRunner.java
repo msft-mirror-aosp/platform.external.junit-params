@@ -397,6 +397,9 @@ public class JUnitParamsRunner extends BlockJUnit4ClassRunner {
     @Override
     public void filter(Filter filter) throws NoTestsRemainException {
         super.filter(filter);
+        // Android-changed: Applying a filter could change the description so invalidate any cached
+        // description. See b/36074730
+        description = null;
         this.parametrizedTestMethodsFilter = new ParametrizedTestMethodsFilter(this,filter);
     }
 
