@@ -14,7 +14,9 @@ public class MacroSubstitutionNamingStrategy implements TestCaseNamingStrategy {
     private static final Pattern MACRO_SPLIT_PATTERN = Pattern.compile(String.format("(?=%s)|(?<=%s)", MACRO_PATTERN, MACRO_PATTERN));
     private static final String MACRO_START = "{";
     private static final String MACRO_END = "}";
-    static final String DEFAULT_TEMPLATE = "[{index}] {params} ({method})";
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    static final String DEFAULT_TEMPLATE = "{method}[{index}]";
     private TestMethod method;
 
     public MacroSubstitutionNamingStrategy(TestMethod testMethod) {
@@ -37,7 +39,12 @@ public class MacroSubstitutionNamingStrategy implements TestCaseNamingStrategy {
 
     private String getTemplate(TestCaseName testCaseName) {
         if (testCaseName != null) {
-            return testCaseName.value();
+            // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names,
+            // changing them will prevent CTS and AndroidJUnitRunner from working properly;
+            // see b/36541809
+            throw new IllegalStateException(
+                    "@TestCaseName not currently supported as it breaks running tests in CTS");
+            // return testCaseName.value();
         }
 
         return DEFAULT_TEMPLATE;
