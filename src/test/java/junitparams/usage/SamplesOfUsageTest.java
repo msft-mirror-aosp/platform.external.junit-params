@@ -102,12 +102,14 @@ public class SamplesOfUsageTest {
         return new Object[]{new Object[]{"first", 1}, new Object[]{"second", 2}};
     }
 
-    @Ignore("does not work when run on device as it does not have access to the file")
+    // Android-changed: does not work when run on device as it does not have access to the file
+    @Ignore
     @Test
     @FileParameters("src/test/resources/test.csv")
     public void loadParamsFromCsv(int age, String name) { }
 
-    @Ignore("does not work when run on device as it does not have access to the file")
+    // Android-changed: does not work when run on device as it does not have access to the file
+    @Ignore
     @Test
     @FileParameters(value = "src/test/resources/test.csv", mapper = PersonMapper.class)
     public void loadParamsFromAnyFile(PersonTest.Person person) { }
@@ -128,11 +130,17 @@ public class SamplesOfUsageTest {
     @Parameters("please\\, escape commas if you use it here and don't want your parameters to be splitted")
     public void commasInParametersUsage(String phrase) { }
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     @Parameters({ "1,1", "2,2", "3,6" })
     @TestCaseName("factorial({0}) = {1}")
     public void customNamesForTestCase(int argument, int result) { }
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     @Parameters({ "value1, value2", "value3, value4" })
     @TestCaseName("[{index}] {method}: {params}")
@@ -148,6 +156,9 @@ public class SamplesOfUsageTest {
         );
     }
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     @Parameters(method = "mixedParameters")
     @TestCaseName("{0}, {1}, {2}, {3}")
