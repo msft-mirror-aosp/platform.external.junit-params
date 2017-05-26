@@ -1,11 +1,13 @@
 package junitparams.internal;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -22,11 +24,12 @@ import junitparams.naming.TestCaseNamingStrategy;
  */
 public class TestMethod {
     private FrameworkMethod frameworkMethod;
-    FrameworkMethodAnnotations frameworkMethodAnnotations;
+    private FrameworkMethodAnnotations frameworkMethodAnnotations;
     private Class<?> testClass;
     private ParametersReader parametersReader;
     private Object[] cachedParameters;
     private TestCaseNamingStrategy namingStrategy;
+    private DescribableFrameworkMethod describableFrameworkMethod;
 
     public TestMethod(FrameworkMethod method, TestClass testClass) {
         this.frameworkMethod = method;
@@ -41,11 +44,13 @@ public class TestMethod {
         return frameworkMethod.getName();
     }
 
-    public static List<TestMethod> listFrom(List<FrameworkMethod> annotatedMethods, TestClass testClass) {
-        List<TestMethod> methods = new ArrayList<TestMethod>();
+    public static List<FrameworkMethod> listFrom(TestClass testClass) {
+        List<FrameworkMethod> methods = new ArrayList<FrameworkMethod>();
 
-        for (FrameworkMethod frameworkMethod : annotatedMethods)
-            methods.add(new TestMethod(frameworkMethod, testClass));
+        for (FrameworkMethod frameworkMethod : testClass.getAnnotatedMethods(Test.class)) {
+            TestMethod testMethod = new TestMethod(frameworkMethod, testClass);
+            methods.add(testMethod.describableFrameworkMethod());
+        }
 
         return methods;
     }
@@ -72,11 +77,11 @@ public class TestMethod {
         return Arrays.equals(frameworkMethodParameterTypes, testMethodParameterTypes);
     }
 
-    Class<?> testClass() {
+    private Class<?> testClass() {
         return testClass;
     }
 
-    public boolean isIgnored() {
+    private boolean isIgnored() {
         return hasIgnoredAnnotation() || hasNoParameters();
     }
 
@@ -88,7 +93,7 @@ public class TestMethod {
        return isParameterised() && parametersSets().length == 0;
     }
 
-    public boolean isNotIgnored() {
+    private boolean isNotIgnored() {
         return !isIgnored();
     }
 
@@ -96,27 +101,64 @@ public class TestMethod {
         return frameworkMethodAnnotations.getAnnotation(annotationType);
     }
 
-    Description describe() {
-        if (isNotIgnored() && !describeFlat()) {
-            Description parametrised = Description.createSuiteDescription(name());
-            Object[] params = parametersSets();
-            for (int i = 0; i < params.length; i++) {
-                Object paramSet = params[i];
-                String name = namingStrategy.getTestCaseName(i, paramSet);
-                String uniqueMethodId = Utils.uniqueMethodId(i, paramSet, name());
+    private Description getDescription(Object[] params, int i) {
+        Object paramSet = params[i];
+        String name = namingStrategy.getTestCaseName(i, paramSet);
+        String uniqueMethodId = Utils.uniqueMethodId(i, paramSet, name());
 
-                parametrised.addChild(
-                        Description.createTestDescription(testClass().getName(), name, uniqueMethodId)
-                );
-            }
-            return parametrised;
-        } else {
-            return Description.createTestDescription(testClass(), name(), frameworkMethodAnnotations.allAnnotations());
-        }
+        return Description.createTestDescription(testClass().getName(), name, uniqueMethodId);
     }
 
-    private boolean describeFlat() {
-        return System.getProperty("JUnitParams.flat") != null;
+    DescribableFrameworkMethod describableFrameworkMethod() {
+        if (describableFrameworkMethod == null) {
+            Description baseDescription = Description.createTestDescription(
+                    testClass, name(), frameworkMethodAnnotations.allAnnotations());
+            Method method = frameworkMethod.getMethod();
+            try {
+                describableFrameworkMethod =
+                        createDescribableFrameworkMethod(method, baseDescription);
+            } catch (IllegalStateException e) {
+                // Defer error until running.
+                describableFrameworkMethod =
+                        new DeferredErrorFrameworkMethod(method, baseDescription, e);
+            }
+        }
+
+        return describableFrameworkMethod;
+    }
+
+    private DescribableFrameworkMethod createDescribableFrameworkMethod(Method method, Description baseDescription) {
+        if (isParameterised()) {
+            if (isNotIgnored()) {
+                Object[] parametersSets = parametersSets();
+                List<InstanceFrameworkMethod> methods
+                        = new ArrayList<InstanceFrameworkMethod>();
+                for (int i = 0; i < parametersSets.length; i++) {
+                    Object parametersSet = parametersSets[i];
+                    Description description = getDescription(parametersSets, i);
+                    methods.add(new InstanceFrameworkMethod(
+                            method, baseDescription.childlessCopy(),
+                            description, parametersSet));
+                }
+
+                return new ParameterisedFrameworkMethod(method, baseDescription, methods);
+            }
+
+            warnIfNoParamsGiven();
+        } else {
+            verifyMethodCanBeRunByStandardRunner(frameworkMethod);
+        }
+
+        // The method to use if it was ignored or was parameterized but had no parameters.
+        return new NonParameterisedFrameworkMethod(method, baseDescription, isIgnored());
+    }
+
+    private void verifyMethodCanBeRunByStandardRunner(FrameworkMethod method) {
+        List<Throwable> errors = new ArrayList<Throwable>();
+        method.validatePublicVoidNoArg(false, errors);
+        if (!errors.isEmpty()) {
+            throw new RuntimeException(errors.get(0));
+        }
     }
 
     public Object[] parametersSets() {
@@ -126,7 +168,7 @@ public class TestMethod {
         return cachedParameters;
     }
 
-    void warnIfNoParamsGiven() {
+    private void warnIfNoParamsGiven() {
         if (isNotIgnored() && isParameterised() && parametersSets().length == 0)
             System.err.println("Method " + name() + " gets empty list of parameters, so it's being ignored!");
     }
