@@ -3,6 +3,7 @@ package junitparams.naming;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import junitparams.internal.TestMethod;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
@@ -30,6 +31,9 @@ public class MacroSubstitutionNamingStrategyTest {
                             new Object[]{"whenGivenMacroDoesntExist", "{not_existing_macro}"}};
     }
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     @Parameters
     public void testNaming(String methodName, String expectedTestCaseName) throws NoSuchMethodException {
