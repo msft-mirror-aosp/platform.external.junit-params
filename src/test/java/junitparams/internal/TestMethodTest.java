@@ -54,6 +54,9 @@ public class TestMethodTest {
     }
 
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     public void hierarchicalTestMethodStructure() throws Exception {
         System.clearProperty("JUnitParams.flat");
@@ -64,6 +67,9 @@ public class TestMethodTest {
         assertEquals("[1] b (forOthersToWork)(junitparams.internal.TestMethodTest)", description.getChildren().get(1).getDisplayName());
     }
 
+    // Android-changed: CTS and AndroidJUnitRunner rely on specific format to test names, changing
+    // them will prevent CTS and AndroidJUnitRunner from working properly; see b/36541809
+    @Ignore
     @Test
     public void hierarchicalArrayTestMethodStructure() throws Exception {
         System.clearProperty("JUnitParams.flat");
