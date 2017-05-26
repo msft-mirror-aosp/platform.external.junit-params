@@ -14,3 +14,6 @@ Local Modifications:
                  java.beans.PropertyEditorManager classes by
                  removing the usages of them.
       36074730 - Make sure that filters affect the Description.
+      36541809 - Hard code the description name to be compatible with CTS
+                 and prevent use of @TestCaseName.
+                 Ignore tests broken by the above change.
