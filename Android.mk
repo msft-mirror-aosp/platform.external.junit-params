@@ -54,6 +54,22 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
 #-------------------------------
+# build a host test jar
+#
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(call all-java-files-under, src/test/java)
+LOCAL_JAVA_RESOURCE_DIRS := src/test/resources
+LOCAL_MODULE := junit-params-test-host
+LOCAL_NO_STANDARD_LIBRARIES := true
+LOCAL_MODULE_TAGS := optional
+LOCAL_STATIC_JAVA_LIBRARIES := \
+	junit-params-host \
+	junit-params-assertj-core-host
+include $(BUILD_HOST_JAVA_LIBRARY)
+
+#-------------------------------
 # build a target test jar
 #
 # Run the test jar as follows:
@@ -81,5 +97,16 @@ include $(CLEAR_VARS)
 
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
     junit-params-assertj-core:lib/assertj-core-1.7.1.jar
+
+include $(BUILD_MULTI_PREBUILT)
+
+#-------------------------------
+# prebuilt dependencies
+
+include $(CLEAR_VARS)
+
+LOCAL_IS_HOST_MODULE := true
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+    junit-params-assertj-core-host:lib/assertj-core-1.7.1.jar
 
 include $(BUILD_MULTI_PREBUILT)

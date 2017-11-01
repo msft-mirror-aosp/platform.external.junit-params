@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 
-import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
@@ -23,12 +22,10 @@ public class InvokeParameterisedMethod extends Statement {
     private final Object[] params;
     private final FrameworkMethod testMethod;
     private final Object testClass;
-    private final String uniqueMethodId;
 
-    public InvokeParameterisedMethod(FrameworkMethod testMethod, Object testClass, Object params, int paramSetIdx) {
+    public InvokeParameterisedMethod(FrameworkMethod testMethod, Object testClass, Object params) {
         this.testMethod = testMethod;
         this.testClass = testClass;
-        this.uniqueMethodId = Utils.uniqueMethodId(paramSetIdx - 1, params, testMethod.getName());
         try {
             if (params instanceof String)
                 this.params = castParamsFromString((String) params);
@@ -216,10 +213,6 @@ public class InvokeParameterisedMethod extends Statement {
                     "Number of parameters inside @Parameters annotation doesn't match the number of test method parameters.\nThere are "
                             + columns.length + " parameters in annotation, while there's " + parameterTypes.length + " parameters in the "
                             + testMethod.getName() + " method.");
-    }
-
-    boolean matchesDescription(Description description) {
-        return description.hashCode() == uniqueMethodId.hashCode();
     }
 
     @Override

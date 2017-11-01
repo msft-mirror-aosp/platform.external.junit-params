@@ -15,8 +15,9 @@ public class SamplesOfUsageVerificationTest {
         Result result = JUnitCore.runClasses(SamplesOfUsageTest.class);
 
         assertEquals(0, result.getFailureCount());
-        // TODO(JUnit4.10) - 2 tests are ignored because they do not work when run on the device.
-        assertEquals(2, result.getIgnoreCount());
+        // Android-changed: 5 tests are ignored, see the @Ignore annotated methods in
+        // SamplesOfUsageTest for more details.
+        assertEquals(5, result.getIgnoreCount());
     }
 
 }
