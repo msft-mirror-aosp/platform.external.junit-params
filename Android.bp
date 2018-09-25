@@ -17,12 +17,12 @@
 //-------------------------------
 // build a target jar
 
-java_library_static {
+java_library {
     name: "junit-params",
     host_supported: true,
     hostdex: true,
     srcs: ["src/main/java/**/*.java"],
-    no_framework_libs: true,
+    sdk_version: "core_current",
     static_libs: ["junit"],
 }
 
@@ -45,7 +45,7 @@ java_test {
     host_supported: true,
     srcs: ["src/test/java/**/*.java"],
     java_resource_dirs: ["src/test/resources"],
-    no_framework_libs: true,
+    sdk_version: "core_current",
     static_libs: [
         "junit-params",
         "junit-params-assertj-core",
