@@ -60,6 +60,11 @@ java_library_host {
 java_test {
     name: "junit-params-test",
     host_supported: true,
+    // Don't consider those unit tests, they would be hard to maintain since they are
+    // from external, and have dependencies on the junit version.
+    test_options: {
+        unit_test: false,
+    },
     srcs: ["src/test/java/**/*.java"],
     java_resource_dirs: ["src/test/resources"],
     sdk_version: "core_current",
