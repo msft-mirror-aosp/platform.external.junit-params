@@ -72,6 +72,11 @@ java_test {
         "junit-params",
         "junit-params-assertj-core",
     ],
+    errorprone: {
+        javacflags: [
+            "-Xep:JUnitParameterMethodNotFound:WARN",
+        ],
+    },
 }
 
 //-------------------------------
