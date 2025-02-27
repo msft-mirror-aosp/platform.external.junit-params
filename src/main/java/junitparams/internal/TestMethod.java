@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -101,12 +102,13 @@ public class TestMethod {
         return frameworkMethodAnnotations.getAnnotation(annotationType);
     }
 
-    private Description getDescription(Object[] params, int i) {
+    private Description getDescription(Object[] params, int i, Collection<Annotation> parentAnnotations) {
         Object paramSet = params[i];
         String name = namingStrategy.getTestCaseName(i, paramSet);
+        name = String.format("%s(%s)", name, testClass().getName());
         String uniqueMethodId = Utils.uniqueMethodId(i, paramSet, name());
 
-        return Description.createTestDescription(testClass().getName(), name, uniqueMethodId);
+        return Description.createSuiteDescription(name, uniqueMethodId, parentAnnotations.toArray(new Annotation[0]));
     }
 
     DescribableFrameworkMethod describableFrameworkMethod() {
@@ -135,7 +137,7 @@ public class TestMethod {
                         = new ArrayList<InstanceFrameworkMethod>();
                 for (int i = 0; i < parametersSets.length; i++) {
                     Object parametersSet = parametersSets[i];
-                    Description description = getDescription(parametersSets, i);
+                    Description description = getDescription(parametersSets, i, baseDescription.getAnnotations());
                     methods.add(new InstanceFrameworkMethod(
                             method, baseDescription.childlessCopy(),
                             description, parametersSet));
