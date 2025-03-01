@@ -21,3 +21,4 @@ Local Modifications:
       36541809 - Partially revert 36541809 to allow @TestCaseName to be
                  used as long as it generates a name that is compatible
                  with CTS and AJUR.
+      394914027- Preserve annotations when method is parameterized.
